@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FitTrack — Personal Fitness App</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <h1>💪 FitTrack</h1>
+      <p class="tagline">Your personal fitness companion — log, track, crush your goals!</p>
+      <div class="header-controls">
+        <a href="index.html" class="btn-small btn-home" style="text-decoration:none; display:inline-flex; align-items:center;">← Home</a>
+        <button id="profileBtn" class="btn-small">👤 Profile</button>
+      </div>
+    </header>
+
+    <!-- Tabs -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="dashboard">📊 Dashboard</button>
+      <button class="tab" data-tab="log">📝 Log Workout</button>
+      <button class="tab" data-tab="history">📋 History</button>
+      <button class="tab" data-tab="resources">🔗 Resources</button>
+    </nav>
+
+    <!-- DASHBOARD TAB -->
+    <section class="tab-content active" id="dashboard">
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-icon">🏃</span>
+          <span class="stat-value" id="totalWorkouts">0</span>
+          <span class="stat-label">Workouts</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">📏</span>
+          <span class="stat-value" id="totalDistance">0 km</span>
+          <span class="stat-label">Total Distance</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">⏱️</span>
+          <span class="stat-value" id="totalTime">0m</span>
+          <span class="stat-label">Total Time</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">🔥</span>
+          <span class="stat-value" id="totalCalories">0</span>
+          <span class="stat-label">Calories</span>
+        </div>
+      </div>
+
+      <!-- Weekly Goal Progress -->
+      <div class="goal-section">
+        <h3>🎯 Weekly Goal</h3>
+        <div class="goal-bar-container">
+          <div class="goal-bar-fill" id="goalBarFill"></div>
+        </div>
+        <p class="goal-text" id="goalText">0 / 20 km — Let's get started!</p>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-grid">
+        <div class="chart-box">
+          <h3>📊 By Activity</h3>
+          <div class="chart-wrap"><canvas id="activityChart"></canvas></div>
+        </div>
+        <div class="chart-box">
+          <h3>📈 Distance Over Time</h3>
+          <div class="chart-wrap"><canvas id="progressChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Activity Breakdown Table -->
+      <div class="breakdown-section">
+        <h3>🏆 Breakdown by Activity</h3>
+        <table class="breakdown-table" id="breakdownTable">
+          <thead>
+            <tr><th>Activity</th><th>Count</th><th>Distance</th><th>Time</th><th>Calories</th><th>Link</th></tr>
+          </thead>
+          <tbody id="breakdownBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- LOG WORKOUT TAB -->
+    <section class="tab-content" id="log">
+      <div class="form-card">
+        <h2>📝 Log a New Workout</h2>
+        <form id="workoutForm">
+          <label>Activity Type</label>
+          <select id="activityType" required>
+            <option value="">Choose activity...</option>
+            <option value="running">🏃 Running</option>
+            <option value="cycling">🚴 Cycling</option>
+            <option value="swimming">🏊 Swimming</option>
+            <option value="walking">🚶 Walking</option>
+            <option value="hiking">🥾 Hiking</option>
+            <option value="gym">🏋️ Gym</option>
+            <option value="yoga">🧘 Yoga</option>
+            <option value="basketball">🏀 Basketball</option>
+            <option value="football">⚽ Football</option>
+            <option value="rowing">🚣 Rowing</option>
+            <option value="dancing">💃 Dancing</option>
+            <option value="boxing">🥊 Boxing</option>
+          </select>
+
+          <label>Distance (km)</label>
+          <input type="number" id="distanceInput" placeholder="e.g. 5.0" step="0.01" min="0" required />
+
+          <label>Duration (minutes)</label>
+          <input type="number" id="durationInput" placeholder="e.g. 30" min="1" required />
+
+          <label>Notes (optional)</label>
+          <input type="text" id="notesInput" placeholder="e.g. Morning run in the park" maxlength="100" />
+
+          <button type="submit" class="btn-big btn-log">✅ Log Workout</button>
+        </form>
+
+        <!-- Workout Summary Preview -->
+        <div class="workout-preview" id="workoutPreview" style="display:none;">
+          <h3>Last Workout</h3>
+          <div class="preview-stats" id="previewStats"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTORY TAB -->
+    <section class="tab-content" id="history">
+      <div class="history-card">
+        <div class="history-header">
+          <h2>📋 Workout History</h2>
+          <div class="history-controls">
+            <input type="text" id="searchInput" placeholder="🔍 Search activity..." class="search-input" />
+            <button id="exportBtn" class="btn-small btn-export">📄 Export CSV</button>
+            <button id="clearBtn" class="btn-small btn-danger">🗑️ Clear All</button>
+          </div>
+        </div>
+        <div class="history-list" id="historyList">
+          <p class="empty-state">No workouts yet. Go log one! 💪</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESOURCES TAB -->
+    <section class="tab-content" id="resources">
+      <div class="resources-card">
+        <h2>🔗 Fitness Resources</h2>
+        <p class="resources-intro">Click any link to learn more about that activity!</p>
+        <div class="resources-grid" id="resourcesGrid"></div>
+      </div>
+    </section>
+
+    <!-- PROFILE MODAL -->
+    <div class="modal-overlay" id="profileModal" style="display:none;">
+      <div class="modal">
+        <h2>👤 Your Profile</h2>
+        <form id="profileForm">
+          <label>Name</label>
+          <input type="text" id="profileName" placeholder="Your name" />
+          <label>Weight (kg) — for calorie calculation</label>
+          <input type="number" id="profileWeight" placeholder="e.g. 70" step="0.1" min="1" />
+          <label>Weekly Goal (km)</label>
+          <input type="number" id="profileGoal" placeholder="e.g. 20" step="0.1" min="0" />
+          <div class="modal-buttons">
+            <button type="submit" class="btn-big btn-save">💾 Save</button>
+            <button type="button" class="btn-big btn-cancel" id="closeProfile">✕ Close</button>
+          </div>
+        </form>
+        <div class="bmi-section">
+          <h3>⚖️ BMI Calculator</h3>
+          <input type="number" id="bmiHeight" placeholder="Height in meters (e.g. 1.75)" step="0.01" min="0.5" />
+          <button id="calcBmi" class="btn-small">Calculate</button>
+          <p id="bmiResult"></p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p><a href="index.html" class="back-home-link">← Back to Home</a> &nbsp;|&nbsp; Made with 💙 — <a href="https://github.com/luelzelalem848-max/fittrack" target="_blank">View on GitHub</a></p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

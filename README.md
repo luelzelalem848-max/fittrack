@@ -1,71 +1,73 @@
-# 💪 FitTrack — Personal Fitness Tracker
+# 💪 FitTrack — Personal Fitness Tracker & Landing Page
 
-A modern, fully-featured fitness tracking web app. Log workouts, track progress, visualize stats, and crush your fitness goals — all in your browser, no sign-up needed.
+FitTrack is a modern, full-featured fitness tracking web application accompanied by a stunning animated landing page. Log workouts, track progress, visualize stats, and crush your fitness goals — all in your browser with zero sign-up needed.
 
-## Features
+---
 
-### 📊 Dashboard
-- Live stat cards: total workouts, total distance, total time, total calories
-- Weekly goal progress bar with visual indicator
-- Interactive doughnut chart: distance by activity type
-- Cumulative progress line chart over time
-- Per-activity breakdown table with training guide links
+## 🚀 Features
 
-### 📝 Log Workouts
-- 12 activity types: running, cycling, swimming, walking, hiking, gym, yoga, basketball, football, rowing, dancing, boxing
-- Automatic calorie calculation using MET values based on your weight
-- Automatic pace calculation
-- Add notes to each workout
-- Instant workout summary with training guide link
+### ✨ Landing Page (`index.html`)
+- **Energetic Dark Theme**: Premium dark glassmorphism design with vibrant red/orange energy gradients.
+- **Sticky Blur Navbar**: Quick navigation links, brand logo, and immediate "Launch App" call to action.
+- **Hero Showcase**: Animated floating workout preview cards and instant launcher.
+- **Feature Highlights**: Scroll reveal cards detailing 12 activities, smart dashboard, auto calorie formulas, and CSV export.
+- **12 Activity Showcase Grid**: Staggered animated cards for Running, Cycling, Swimming, Walking, Hiking, Gym, Yoga, Basketball, Football, Rowing, Dancing, and Boxing.
+- **3-Step How It Works**: Visual step guide to jumpstart workout logging.
+- **Animated Stat Counters**: Smooth counting animations triggered on scroll.
 
-### 📋 History
-- Full workout history with search
-- Each entry shows activity, date, distance, time, calories, and notes
-- Resource link for every activity
-- Delete individual workouts
-- Export to CSV (Excel/Google Sheets compatible)
-- Clear all history (with confirmation)
+### 📊 FitTrack App (`app.html`)
+- **Live Stats Dashboard**: Total workouts, total distance, total time, and auto-calculated calories burned.
+- **Interactive Charts**: Chart.js activity breakdown doughnut chart and distance progression line graph.
+- **Weekly Goals**: Visual progress bar linked to your custom weekly distance target.
+- **12 Activity Logging**: MET-based calorie calculations personalized to your weight.
+- **Workout History & CSV Export**: Searchable workout history, single-entry deletion, and one-click CSV download.
+- **User Profile & BMI Calculator**: Weight-powered calorie precision and instant CDC-referenced BMI results.
 
-### 🔗 Resources
-- Curated beginner training guides for every activity
-- General fitness resources (Verywell Fit, Strava, MyFitnessPal)
+---
 
-### 👤 Profile
-- Set your name, weight, and weekly distance goal
-- Weight powers accurate calorie calculations
-- Weekly goal powers the progress bar
-- Profile saved automatically
-- Built-in BMI calculator with CDC reference link
+## 🛠️ Tech Stack
+- **HTML5**, **CSS3** (CSS Variables, Flexbox, Grid, Glassmorphism, Animations)
+- **Vanilla JavaScript** (ES6+, Intersection Observer API, DOM Manipulation)
+- **Chart.js** (CDN) for responsive charts
+- **Google Fonts** (Poppins)
+- **localStorage** for instant, offline data persistence
 
-## Tech Stack
-- HTML5, CSS3, vanilla JavaScript (no frameworks)
-- Chart.js (CDN) for doughnut & line charts
-- Poppins font (Google Fonts)
-- localStorage for data persistence
-- No backend, no databases, no sign-up
+---
 
-## How to Run
-1. Clone the repo
-2. Open `index.html` in any browser
-3. Start tracking your workouts!
-
-## Deploy to GitHub Pages
-1. Push to GitHub
-2. Go to **Settings → Pages**
-3. Select **main** branch, `/ (root)` folder
-4. Save — live in minutes!
-
-## Project Structure
+## 📁 Project Structure
 ```
 fittrack-web/
-├── index.html       # Main structure (4 tabs + profile modal)
-├── style.css        # Dark theme styling
-├── app.js           # Full app logic (logging, charts, history, CSV, BMI)
-└── README.md        # You are here
+├── index.html       # Animated landing page
+├── landing.css      # Dark theme & glassmorphism styling for landing page
+├── landing.js       # Scroll reveals, animated counters & mobile menu logic
+├── app.html         # Main FitTrack web application (4 tabs + profile modal)
+├── style.css        # Fitness app stylesheet
+├── app.js           # Full app logic (logging, charts, history, CSV export, BMI)
+└── README.md        # Documentation
 ```
 
-## License
+---
+
+## 🚀 How to Run
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/luelzelalem848-max/fittrack.git
+   ```
+2. Open `index.html` in any web browser to view the landing page.
+3. Click **Launch App** or open `app.html` directly to start logging your workouts!
+
+---
+
+## 🌐 Deploy to GitHub Pages
+1. Push all code to the `main` branch.
+2. Navigate to **Settings → Pages** in your GitHub repository.
+3. Select `main` branch and `/ (root)` folder.
+4. Save — your landing page and app will be live in minutes!
+
+---
+
+## 📄 License
 MIT — free to use, modify, and share.
 
-## Author
-**Luel Zelalem** — [GitHub](https://github.com/luelzelalem848-max)
+## 👤 Author
+**Luel Zelalem** — [GitHub Profile](https://github.com/luelzelalem848-max)
