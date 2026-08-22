@@ -162,3 +162,23 @@ function initSmoothScroll() {
     });
   });
 }
+
+// ====== WORK IN PROGRESS POSTER ======
+window.addEventListener('load', function() {
+  // Animate progress bar to 60%
+  setTimeout(function() {
+    var fill = document.getElementById('wipProgressFill');
+    var pct = document.getElementById('wipProgressPct');
+    if (fill && pct) {
+      var target = 60;
+      fill.style.width = target + '%';
+      // Count up animation
+      var current = 0;
+      var interval = setInterval(function() {
+        current++;
+        pct.textContent = current + '%';
+        if (current >= target) clearInterval(interval);
+      }, 25);
+    }
+  }, 500);
+});

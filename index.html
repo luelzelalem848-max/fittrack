@@ -26,6 +26,30 @@
     </div>
   </header>
 
+  <!-- WORK IN PROGRESS POSTER -->
+  <div class="wip-poster" id="wipPoster">
+    <div class="wip-stripe"></div>
+    <div class="wip-content">
+      <div class="wip-icon-wrap">
+        <span class="wip-hammer">🔧</span>
+        <span class="wip-gear">⚙️</span>
+      </div>
+      <div class="wip-text-block">
+        <span class="wip-label">🚧 WORK IN PROGRESS</span>
+        <span class="wip-message">This project is actively under development — not all features are completed yet. Stay tuned for updates!</span>
+      </div>
+      <div class="wip-progress-wrap">
+        <div class="wip-progress-label">Development Progress</div>
+        <div class="wip-progress-bar">
+          <div class="wip-progress-fill" id="wipProgressFill"></div>
+        </div>
+        <div class="wip-progress-pct" id="wipProgressPct">0%</div>
+      </div>
+      <button class="wip-close" onclick="document.getElementById('wipPoster').style.display='none'">✕</button>
+    </div>
+  </div>
+
+
   <!-- HERO SECTION -->
   <section class="hero-section">
     <div class="container hero-grid">
