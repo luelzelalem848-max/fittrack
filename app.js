@@ -60,6 +60,12 @@ function saveProfile() {
   localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
 }
 
+function escapeHtml(value) {
+  return String(value).replace(/[&<>\"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', "'": '&#39;'
+  }[char]));
+}
+
 // ---- Calculate calories ----
 function calcCalories(activity, duration) {
   const met = METS[activity] || 5.0;
@@ -194,12 +200,12 @@ function renderBreakdown() {
 
   tbody.innerHTML = Object.entries(byActivity).map(([act, d]) => `
     <tr>
-      <td>${activityIcons[act] || '📦'} ${act}</td>
+      <td>${escapeHtml(activityIcons[act] || '📦')} ${escapeHtml(act)}</td>
       <td>${d.count}</td>
       <td>${d.dist.toFixed(1)} km</td>
       <td>${formatDuration(d.dur)}</td>
       <td>${d.cal} kcal</td>
-      <td><a href="${activityLinks[act] || '#'}" target="_blank">Guide ↗</a></td>
+      <td><a href="${escapeHtml(activityLinks[act] || '#')}" target="_blank">Guide ↗</a></td>
     </tr>
   `).join('');
 }
@@ -230,9 +236,9 @@ document.getElementById('workoutForm').addEventListener('submit', function(e) {
   const pace = distance > 0 ? (duration / distance).toFixed(1) : 'N/A';
   document.getElementById('workoutPreview').style.display = 'block';
   document.getElementById('previewStats').innerHTML = `
-    ✅ <strong>${activityIcons[activity]} ${activity}</strong> — ${distance.toFixed(1)} km in ${duration} mins<br>
+    ✅ <strong>${escapeHtml(activityIcons[activity])} ${escapeHtml(activity)}</strong> — ${distance.toFixed(1)} km in ${duration} mins<br>
     🔥 ${workout.calories} kcal burned | 🏃 Pace: ${pace} min/km<br>
-    🔗 <a href="${activityLinks[activity]}" target="_blank" style="color:#ff6b6b;">Training guide for ${activity} ↗</a>
+    🔗 <a href="${escapeHtml(activityLinks[activity])}" target="_blank" style="color:#ff6b6b;">Training guide for ${escapeHtml(activity)} ↗</a>
   `;
 
   // Reset form
@@ -258,14 +264,14 @@ function renderHistory(filter) {
 
   list.innerHTML = filtered.map(w => `
     <div class="history-item">
-      <span class="history-icon">${activityIcons[w.activity] || '📦'}</span>
+      <span class="history-icon">${escapeHtml(activityIcons[w.activity] || '📦')}</span>
       <div class="history-info">
-        <span class="history-activity">${w.activity}</span>
-        <span class="history-meta">${formatDate(w.date)} · ${w.duration}m · ${w.calories} kcal${w.notes ? ' · 📝 ' + w.notes : ''}</span>
+        <span class="history-activity">${escapeHtml(w.activity)}</span>
+        <span class="history-meta">${formatDate(w.date)} · ${w.duration}m · ${w.calories} kcal${w.notes ? ' · 📝 ' + escapeHtml(w.notes) : ''}</span>
       </div>
       <span class="history-amount">${w.distance.toFixed(1)} km</span>
-      <a class="history-link" href="${activityLinks[w.activity] || '#'}" target="_blank">Guide ↗</a>
-      <button class="btn-delete-item" onclick="deleteWorkout('${w.id}')">✕</button>
+      <a class="history-link" href="${escapeHtml(activityLinks[w.activity] || '#')}" target="_blank">Guide ↗</a>
+      <button class="btn-delete-item" onclick="deleteWorkout('${escapeHtml(w.id)}')">✕</button>
     </div>
   `).join('');
 }
@@ -318,7 +324,7 @@ function renderResources() {
     <div class="resource-item">
       <span class="resource-emoji">${activityIcons[act]}</span>
       <div class="resource-name">${act.charAt(0).toUpperCase() + act.slice(1)}</div>
-      <a class="resource-link" href="${link}" target="_blank">📖 Beginner's Guide ↗</a>
+      <a class="resource-link" href="${escapeHtml(link)}" target="_blank">📖 Beginner's Guide ↗</a>
     </div>
   `).join('') + `
     <div class="resource-item">
