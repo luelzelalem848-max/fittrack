@@ -11,6 +11,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="app-lux.css" />
+  <link rel="stylesheet" href="shell.css" />
   <link rel="stylesheet" href="fx-pack.css" />
 </head>
 <body data-logo="💪">
@@ -34,61 +35,74 @@
   </div>
 </div>
 
-  <div class="app">
-    <!-- Header -->
-    <header class="header">
-      <h1>💪 FitTrack</h1>
-      <p class="tagline">Your personal fitness companion — log, track, crush your goals!</p>
-      <div class="header-controls">
-        <a href="index.html" class="btn-small btn-home" style="text-decoration:none; display:inline-flex; align-items:center;">← Home</a>
-        <button id="profileBtn" class="btn-small">👤 Profile</button>
-      </div>
-    </header>
-
-    <!-- Tabs -->
+<div class="app">
+  <!-- ======== SIDEBAR ======== -->
+  <aside class="fx-side">
+    <div class="brand">💪 <span>FitTrack</span></div>
+    <span class="side-tag">Training HQ</span>
     <nav class="tabs">
       <button class="tab active" data-tab="dashboard">📊 Dashboard</button>
       <button class="tab" data-tab="log">📝 Log Workout</button>
       <button class="tab" data-tab="history">📋 History</button>
       <button class="tab" data-tab="resources">🔗 Resources</button>
     </nav>
+    <div class="side-controls">
+      <button id="profileBtn" class="btn-small">👤 Profile</button>
+      <a href="index.html" class="btn-small" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">← Home</a>
+      <div class="side-user">
+        <div class="avatar">🏋️</div>
+        <div>
+          <b>Stay Elite</b>
+          <small>No Excuses</small>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ======== MAIN ======== -->
+  <main class="fx-main">
+    <div class="fx-topbar">
+      <h2>Training Dashboard</h2>
+      <div class="top-actions">
+      </div>
+    </div>
 
     <!-- DASHBOARD TAB -->
     <section class="tab-content active" id="dashboard">
-      <!-- Stats Cards -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <span class="stat-icon">🏃</span>
-          <span class="stat-value" id="totalWorkouts">0</span>
-          <span class="stat-label">Workouts</span>
+      <section class="fx-hero">
+        <div class="hero-glow"></div>
+        <span class="hero-kicker">🏆 Total Workouts</span>
+        <div class="hero-num" id="totalWorkouts" data-count>0</div>
+        <div class="hero-row">
+          <span class="hero-chip">🛡️ Weekly Goal <b id="goalText">0 / 20 km — Let's get started!</b></span>
         </div>
+      </section>
+
+      <section class="fx-bento">
         <div class="stat-card">
           <span class="stat-icon">📏</span>
-          <span class="stat-value" id="totalDistance">0 km</span>
           <span class="stat-label">Total Distance</span>
+          <span class="stat-value" id="totalDistance" data-count>0 km</span>
         </div>
         <div class="stat-card">
           <span class="stat-icon">⏱️</span>
-          <span class="stat-value" id="totalTime">0m</span>
           <span class="stat-label">Total Time</span>
+          <span class="stat-value" id="totalTime" data-count>0m</span>
         </div>
         <div class="stat-card">
           <span class="stat-icon">🔥</span>
-          <span class="stat-value" id="totalCalories">0</span>
           <span class="stat-label">Calories</span>
+          <span class="stat-value" id="totalCalories" data-count>0</span>
         </div>
-      </div>
+      </section>
 
-      <!-- Weekly Goal Progress -->
       <div class="goal-section">
         <h3>🎯 Weekly Goal</h3>
         <div class="goal-bar-container">
           <div class="goal-bar-fill" id="goalBarFill"></div>
         </div>
-        <p class="goal-text" id="goalText">0 / 20 km — Let's get started!</p>
       </div>
 
-      <!-- Charts -->
       <div class="charts-grid">
         <div class="chart-box">
           <h3>📊 By Activity</h3>
@@ -100,7 +114,6 @@
         </div>
       </div>
 
-      <!-- Activity Breakdown Table -->
       <div class="breakdown-section">
         <h3>🏆 Breakdown by Activity</h3>
         <table class="breakdown-table" id="breakdownTable">
@@ -112,7 +125,7 @@
       </div>
     </section>
 
-    <!-- LOG WORKOUT TAB -->
+    <!-- LOG TAB -->
     <section class="tab-content" id="log">
       <div class="form-card">
         <h2>📝 Log a New Workout</h2>
@@ -146,7 +159,6 @@
           <button type="submit" class="btn-big btn-log">✅ Log Workout</button>
         </form>
 
-        <!-- Workout Summary Preview -->
         <div class="workout-preview" id="workoutPreview" style="display:none;">
           <h3>Last Workout</h3>
           <div class="preview-stats" id="previewStats"></div>
@@ -208,13 +220,15 @@
     <footer class="footer">
       <p><a href="index.html" class="back-home-link">← Back to Home</a> &nbsp;|&nbsp; Made with 💙 — <a href="https://github.com/luelzelalem848-max/fittrack" target="_blank">View on GitHub</a></p>
     </footer>
-  </div>
+  </main>
+</div>
 
-  <script src="app.js"></script>
+<script src="app.js"></script>
 <script src="login.js"></script>
 <script src="ultra.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="app3d.js"></script>
-  <script src="fx-pack.js"></script>
+<script src="kinetic.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="app3d.js"></script>
+<script src="fx-pack.js"></script>
 </body>
 </html>
