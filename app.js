@@ -1,5 +1,16 @@
 // ====== FitTrack — Web Fitness Tracker ======
 
+/* ---- v6 premium chart defaults ---- */
+if (window.Chart) {
+  Chart.defaults.font.family = "'Space Grotesk', 'Poppins', sans-serif";
+  Chart.defaults.color = 'rgba(255,255,255,.55)';
+  Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(8,12,26,.92)';
+  Chart.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,.14)';
+  Chart.defaults.plugins.tooltip.borderWidth = 1;
+  Chart.defaults.plugins.tooltip.padding = 12;
+  Chart.defaults.plugins.tooltip.cornerRadius = 12;
+  Chart.defaults.plugins.tooltip.displayColors = false;
+}
 const STORAGE_KEY = 'fittrack_workouts';
 const PROFILE_KEY = 'fittrack_profile';
 
@@ -137,6 +148,7 @@ function renderActivityChart() {
     type: 'doughnut',
     data: { labels, datasets: [{ data, backgroundColor: colors.slice(0, labels.length), borderWidth: 0 }] },
     options: {
+      cutout: '70%', hoverOffset: 10,
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { position: 'bottom', labels: { color: '#8888aa', font: { size: 10 }, padding: 8 } } }
     }
@@ -161,8 +173,8 @@ function renderProgressChart() {
       datasets: [{
         label: 'Cumulative Distance (km)',
         data,
-        borderColor: '#e84545',
-        backgroundColor: 'rgba(232, 69, 69, 0.1)',
+        borderColor: '#ff6b6b',
+        backgroundColor: function (c) { var g = c.chart.ctx.createLinearGradient(0, 0, 0, 280); g.addColorStop(0, 'rgba(232,69,69,.45)'); g.addColorStop(1, 'rgba(232,69,69,0)'); return g; },
         fill: true,
         tension: 0.3,
         pointRadius: 4,

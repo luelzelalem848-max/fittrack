@@ -19,20 +19,21 @@
     <ul class="nav-links" id="navLinks">
       <li><a href="#features">Features</a></li>
       <li><a href="#stats">Why FitTrack</a></li>
-      <li><a href="login.html" class="nav-cta">Launch App 🚀</a></li>
+      <li><a href="login.html" class="nav-cta">Launch App</a></li>
     </ul>
     <button class="nav-burger" id="burger" aria-label="Menu">☰</button>
   </nav>
 
   <header class="hero3d">
-    <canvas id="scene3d"></canvas>
+    <video class="fx-video" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-hidden="true"><source src="assets/bg-video.mp4" type="video/mp4"></video>
+<canvas id="scene3d"></canvas>
     <div class="hero-inner">
       <span class="hero-badge rv">🔥 Train. Log. Grow.</span>
       <h1 class="hero-title rv" data-d="1">EVERY REP,<br /><span class="stroke">RECORDED.</span></h1>
       <p class="hero-sub rv" data-d="2">FitTrack is your dark, elite training log — capture every session, watch your volume climb, and never lose a workout again.</p>
       <div class="hero-ctas rv" data-d="3">
-        <a href="login.html" class="btn-primary">Launch App 🚀</a>
-        <a href="https://github.com/luelzelalem848-max/fittrack" target="_blank" rel="noopener" class="btn-ghost">View on GitHub 🐙</a>
+        <a href="login.html" class="btn-primary">Launch App</a>
+        <a href="https://github.com/luelzelalem848-max/fittrack" target="_blank" rel="noopener" class="btn-ghost">View on GitHub</a>
       </div>
     </div>
     <div class="scroll-hint">⌄</div>
@@ -44,32 +45,32 @@
     <p class="section-sub rv" data-d="2">No fluff. A training log that respects the grind and shows your progress like a highlight reel.</p>
     <div class="bento">
       <div class="bento-card stat-card b-wide rv" data-d="1">
-  <div class="b-icon">🏋️</div>
+  <div class="b-icon"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 8v8"/><path d="M17 8v8"/><path d="M3 10v4"/><path d="M21 10v4"/><path d="M7 12h10"/></svg></div>
   <h3>Workout log</h3>
   <p>Log exercises, sets, reps and weights in seconds — even mid-set.</p>
 </div>
       <div class="bento-card stat-card  rv" data-d="2">
-  <div class="b-icon">📈</div>
+  <div class="b-icon"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 7-8"/><path d="M16 7h4v4"/></svg></div>
   <h3>Progress charts</h3>
   <p>Volume, frequency and personal records charted over time.</p>
 </div>
       <div class="bento-card stat-card b-tall rv" data-d="3">
-  <div class="b-icon">🔥</div>
+  <div class="b-icon"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c2 4 5 6 5 10a5 5 0 0 1-10 0c0-2 1-4 3-5"/><path d="M12 22a5 5 0 0 0 5-5"/></svg></div>
   <h3>Streaks</h3>
   <p>Consistency tracker that keeps the fire lit day after day.</p>
 </div>
       <div class="bento-card stat-card  rv" data-d="4">
-  <div class="b-icon">⏱️</div>
+  <div class="b-icon"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
   <h3>Session history</h3>
   <p>Every workout saved and searchable, forever.</p>
 </div>
       <div class="bento-card stat-card b-wide rv" data-d="5">
-  <div class="b-icon">📴</div>
+  <div class="b-icon"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
   <h3>Offline first</h3>
   <p>Train in the basement with no signal — data still saves.</p>
 </div>
       <div class="bento-card stat-card  rv" data-d="1">
-  <div class="b-icon">🕶️</div>
+  <div class="b-icon"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L3.3 9.4l6.1-.8L12 3z"/></svg></div>
   <h3>Dark & elite</h3>
   <p>A UI built like the gym at 5am — dark, sharp, focused.</p>
 </div>
@@ -100,7 +101,7 @@
     <p>Built by <a href="https://github.com/luelzelalem848-max/fittrack" target="_blank" rel="noopener">Luel Zelalem</a> · 2026 · Free & open source</p>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="vendor/three.min.js"></script>
   <script src="scene3d.js"></script>
   <script src="ultra.js"></script>
   <script>
