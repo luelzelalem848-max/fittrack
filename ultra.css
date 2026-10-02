@@ -5,7 +5,7 @@
 @property --fx-ang { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
 
 .fx-shimmer {
-  background: linear-gradient(110deg, #e84545 0%, #ff8e53 25%, #ffd166 50%, #e84545 75%, #ff8e53 100%);
+  background: linear-gradient(110deg, #dc2626 0%, #facc15 25%, #ffd166 50%, #dc2626 75%, #facc15 100%);
   background-size: 220% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -24,7 +24,7 @@
   border-radius: inherit;
   padding: 1px;
   background: conic-gradient(from var(--fx-ang),
-    transparent 0%, transparent 30%%, #e84545 45%%, #ff8e53 55%%, transparent 70%%, transparent 100%%);
+    transparent 0%, transparent 30%%, #dc2626 45%%, #facc15 55%%, transparent 70%%, transparent 100%%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
           mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -50,8 +50,8 @@
   opacity: .35;
   animation: fx-blob-drift 22s ease-in-out infinite alternate;
 }
-.fx-aurora i:nth-child(1) { width: 42vw; height: 42vw; left: -12%%; top: -18%%; background: #e84545; animation-delay: -4s; }
-.fx-aurora i:nth-child(2) { width: 36vw; height: 36vw; right: -10%%; top: 12%%; background: #ff8e53; animation-delay: -12s; }
+.fx-aurora i:nth-child(1) { width: 42vw; height: 42vw; left: -12%%; top: -18%%; background: #dc2626; animation-delay: -4s; }
+.fx-aurora i:nth-child(2) { width: 36vw; height: 36vw; right: -10%%; top: 12%%; background: #facc15; animation-delay: -12s; }
 .fx-aurora i:nth-child(3) { width: 30vw; height: 30vw; left: 28%%; bottom: -25%%; background: #ffd166; opacity: .18; animation-delay: -18s; }
 @keyframes fx-blob-drift {
   0%%   { transform: translate3d(0, 0, 0) scale(1); }
@@ -107,17 +107,17 @@ body::after {
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: rgba(10,12,22,.9); }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #e84545, #ff8e53);
+  background: linear-gradient(180deg, #dc2626, #facc15);
   border-radius: 8px;
   border: 2px solid rgba(10,12,22,.9);
 }
-::selection { background: #e8454555; }
+::selection { background: #dc262655; }
 
 /* Focus glow */
 .fx-glow-input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #e8454566, 0 0 24px #e8454533;
-  border-color: #e84545;
+  box-shadow: 0 0 0 2px #dc262666, 0 0 24px #dc262633;
+  border-color: #dc2626;
 }
 
 @media (prefers-reduced-motion: reduce) {

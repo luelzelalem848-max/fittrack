@@ -139,7 +139,7 @@ function renderActivityChart() {
   workouts.forEach(w => { byActivity[w.activity] = (byActivity[w.activity] || 0) + w.distance; });
   const labels = Object.keys(byActivity);
   const data = Object.values(byActivity);
-  const colors = ['#e84545','#4ade80','#fbbf24','#3b82f6','#a855f7','#ec4899','#06b6d4','#84cc16','#f97316','#8b5cf6','#14b8a6','#ef4444'];
+  const colors = ['#dc2626','#4ade80','#fbbf24','#3b82f6','#f59e0b','#ec4899','#06b6d4','#84cc16','#f97316','#8b5cf6','#14b8a6','#ef4444'];
 
   if (activityChart) activityChart.destroy();
   if (labels.length === 0) return;
@@ -174,11 +174,11 @@ function renderProgressChart() {
         label: 'Cumulative Distance (km)',
         data,
         borderColor: '#ff6b6b',
-        backgroundColor: function (c) { var g = c.chart.ctx.createLinearGradient(0, 0, 0, 280); g.addColorStop(0, 'rgba(232,69,69,.45)'); g.addColorStop(1, 'rgba(232,69,69,0)'); return g; },
+        backgroundColor: function (c) { var g = c.chart.ctx.createLinearGradient(0, 0, 0, 280); g.addColorStop(0, 'rgba(220,38,38,.45)'); g.addColorStop(1, 'rgba(220,38,38,0)'); return g; },
         fill: true,
         tension: 0.3,
         pointRadius: 4,
-        pointBackgroundColor: '#e84545'
+        pointBackgroundColor: '#dc2626'
       }]
     },
     options: {
@@ -396,3 +396,23 @@ loadProfile();
 loadWorkouts();
 renderDashboard();
 renderHistory();
+
+// ---- Theme (dark/light) ----
+const FITTRACK_THEME = 'fittrack_theme';
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.textContent = theme === 'light' ? '🌙 Theme' : '☀️ Theme';
+  if (typeof renderCharts === 'function') { try { renderCharts(); } catch (e) {} }
+}
+function loadTheme() { applyTheme(localStorage.getItem(FITTRACK_THEME) || 'dark'); }
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'light' ? 'dark' : 'light';
+  applyTheme(next); localStorage.setItem(FITTRACK_THEME, next);
+}
+document.addEventListener('DOMContentLoaded', function () {
+  const t = document.getElementById('themeToggle');
+  if (t) t.addEventListener('click', toggleTheme);
+  loadTheme();
+});
