@@ -1,11 +1,20 @@
-// ====== FitTrack — Web Fitness Tracker ======
+// =====================================================================
+// FitTrack — app.js
+// This one file runs the whole app. Reading order, top to bottom:
+//   1. Settings and data (the list of workouts lives in the `workouts` array)
+//   2. Helpers: saving/loading, calories, formatting
+//   3. "render" functions: they draw the numbers, charts, tables and lists
+//   4. Event listeners: they connect buttons and forms on the page to the functions
+//   5. Theme (dark / light)
+// Everything is saved in the browser's localStorage, so nothing leaves your device.
+// =====================================================================
 
-/* ---- v6 premium chart defaults ---- */
+// Fonts and colors that Chart.js uses for every chart (only runs if the Chart.js library loaded)
 if (window.Chart) {
-  Chart.defaults.font.family = "'Space Grotesk', 'Poppins', sans-serif";
-  Chart.defaults.color = 'rgba(255,255,255,.55)';
-  Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(8,12,26,.92)';
-  Chart.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,.14)';
+  Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+  Chart.defaults.color = '#8f979f';
+  Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15,17,20,.95)';
+  Chart.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,.15)';
   Chart.defaults.plugins.tooltip.borderWidth = 1;
   Chart.defaults.plugins.tooltip.padding = 12;
   Chart.defaults.plugins.tooltip.cornerRadius = 12;
@@ -19,14 +28,14 @@ let profile = { name: 'Athlete', weight: 70, weeklyGoal: 20 };
 let activityChart = null;
 let progressChart = null;
 
-// ---- MET values ----
+// ---- MET values: how hard each activity is. Used to estimate calories burned ----
 const METS = {
   running: 9.8, cycling: 7.5, swimming: 8.0, walking: 3.5, hiking: 6.0,
   gym: 5.0, yoga: 3.0, basketball: 6.5, football: 7.0, rowing: 8.5,
   dancing: 4.5, boxing: 9.0
 };
 
-// ---- Activity icons ----
+// ---- One emoji icon per activity (shown in the history list and tables) ----
 const activityIcons = {
   running: '🏃', cycling: '🚴', swimming: '🏊', walking: '🚶', hiking: '🥾',
   gym: '🏋️', yoga: '🧘', basketball: '🏀', football: '⚽', rowing: '🚣',
@@ -49,16 +58,18 @@ const activityLinks = {
   boxing: 'https://www.titleboxing.com/beginners-boxing-guide'
 };
 
-// ---- Load from localStorage ----
+// Reads the saved workouts from localStorage (they are saved as text) and turns them back into the `workouts` array.
 function loadWorkouts() {
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) { try { workouts = JSON.parse(saved); } catch(e) { workouts = []; } }
 }
 
+// Saves the whole workouts array into localStorage so it is still there after a refresh.
 function saveWorkouts() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(workouts));
 }
 
+// Reads the saved profile (name, weight, weekly goal) and puts the values into the profile form.
 function loadProfile() {
   const saved = localStorage.getItem(PROFILE_KEY);
   if (saved) { try { profile = JSON.parse(saved); } catch(e) {} }
@@ -67,10 +78,12 @@ function loadProfile() {
   document.getElementById('profileGoal').value = profile.weeklyGoal;
 }
 
+// Saves the profile into localStorage.
 function saveProfile() {
   localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
 }
 
+// Makes text safe before it goes into the page, so someone typing <b> or a script in the notes cannot break the page.
 function escapeHtml(value) {
   return String(value).replace(/[&<>\"']/g, char => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', "'": '&#39;'
@@ -78,23 +91,26 @@ function escapeHtml(value) {
 }
 
 // ---- Calculate calories ----
+// Estimates calories burned: MET value x body weight (kg) x time (hours). Example: running 30 min at 70 kg = 9.8 x 70 x 0.5 = 343 kcal.
 function calcCalories(activity, duration) {
   const met = METS[activity] || 5.0;
   return Math.round(met * profile.weight * (duration / 60));
 }
 
 // ---- Format helpers ----
+// Turns a saved date (like 2026-10-10T08:00:00Z) into readable text, e.g. "Oct 10, 2026".
 function formatDate(iso) {
   const d = new Date(iso);
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
+// Turns minutes into text: 45 becomes "45m", 135 becomes "2h 15m".
 function formatDuration(mins) {
   if (mins < 60) return mins + 'm';
   return Math.floor(mins / 60) + 'h ' + (mins % 60) + 'm';
 }
 
-// ---- Tab switching ----
+// ---- Tab switching: clicking a tab hides all tabs, shows the clicked one, and redraws it ----
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -108,6 +124,7 @@ document.querySelectorAll('.tab').forEach(tab => {
 });
 
 // ---- Render Dashboard ----
+// Calculates and shows the dashboard: totals, the weekly goal bar, the 2 charts and the breakdown table.
 function renderDashboard() {
   // Stats
   const total = workouts.reduce((s, w) => s + w.distance, 0);
@@ -119,12 +136,14 @@ function renderDashboard() {
   document.getElementById('totalTime').textContent = formatDuration(totalDur);
   document.getElementById('totalCalories').textContent = totalCal + ' kcal';
 
-  // Goal bar
-  const pct = Math.min((total / profile.weeklyGoal) * 100, 100);
+  // Weekly goal bar: only counts distance from the last 7 days
+  const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const weekDistance = workouts.filter(w => new Date(w.date).getTime() >= weekAgo).reduce((s, w) => s + w.distance, 0);
+  const pct = Math.min((weekDistance / profile.weeklyGoal) * 100, 100);
   document.getElementById('goalBarFill').style.width = pct + '%';
-  let goalMsg = total.toFixed(1) + ' / ' + profile.weeklyGoal + ' km';
-  if (pct >= 100) goalMsg += ' — 🎉 Goal achieved!';
-  else goalMsg += ' — ' + (profile.weeklyGoal - total).toFixed(1) + ' km to go!';
+  let goalMsg = weekDistance.toFixed(1) + ' / ' + profile.weeklyGoal + ' km this week';
+  if (pct >= 100) goalMsg += ' — goal reached!';
+  else goalMsg += ' — ' + (profile.weeklyGoal - weekDistance).toFixed(1) + ' km to go';
   document.getElementById('goalText').textContent = goalMsg;
 
   renderActivityChart();
@@ -133,13 +152,14 @@ function renderDashboard() {
 }
 
 // ---- Activity Doughnut Chart ----
+// Draws the doughnut chart: how much distance you did in each activity.
 function renderActivityChart() {
   const ctx = document.getElementById('activityChart').getContext('2d');
   const byActivity = {};
   workouts.forEach(w => { byActivity[w.activity] = (byActivity[w.activity] || 0) + w.distance; });
   const labels = Object.keys(byActivity);
   const data = Object.values(byActivity);
-  const colors = ['#dc2626','#4ade80','#fbbf24','#3b82f6','#f59e0b','#ec4899','#06b6d4','#84cc16','#f97316','#8b5cf6','#14b8a6','#ef4444'];
+  const colors = ['#f0670f','#3b82f6','#10b981','#eab308','#ec4899','#06b6d4','#8b5cf6','#84cc16','#ef4444','#14b8a6','#f59e0b','#6366f1'];
 
   if (activityChart) activityChart.destroy();
   if (labels.length === 0) return;
@@ -156,6 +176,7 @@ function renderActivityChart() {
 }
 
 // ---- Progress Line Chart ----
+// Draws the line chart: your total distance growing workout by workout.
 function renderProgressChart() {
   const ctx = document.getElementById('progressChart').getContext('2d');
   const sorted = [...workouts].sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -173,12 +194,12 @@ function renderProgressChart() {
       datasets: [{
         label: 'Cumulative Distance (km)',
         data,
-        borderColor: '#ff6b6b',
-        backgroundColor: function (c) { var g = c.chart.ctx.createLinearGradient(0, 0, 0, 280); g.addColorStop(0, 'rgba(220,38,38,.45)'); g.addColorStop(1, 'rgba(220,38,38,0)'); return g; },
+        borderColor: '#f0670f',
+        backgroundColor: 'rgba(240,103,15,.15)',
         fill: true,
         tension: 0.3,
         pointRadius: 4,
-        pointBackgroundColor: '#dc2626'
+        pointBackgroundColor: '#f0670f'
       }]
     },
     options: {
@@ -193,6 +214,7 @@ function renderProgressChart() {
 }
 
 // ---- Breakdown Table ----
+// Builds the table with one row per activity (count, distance, time, calories, guide link).
 function renderBreakdown() {
   const tbody = document.getElementById('breakdownBody');
   const byActivity = {};
@@ -206,7 +228,7 @@ function renderBreakdown() {
   });
 
   if (Object.keys(byActivity).length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#8888aa;padding:16px;">No workouts yet</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No workouts yet</td></tr>';
     return;
   }
 
@@ -222,7 +244,7 @@ function renderBreakdown() {
   `).join('');
 }
 
-// ---- Log Workout ----
+// ---- "Log Workout" form: read the 4 fields, build a workout object, save it, show a preview ----
 document.getElementById('workoutForm').addEventListener('submit', function(e) {
   e.preventDefault();
 
@@ -248,9 +270,9 @@ document.getElementById('workoutForm').addEventListener('submit', function(e) {
   const pace = distance > 0 ? (duration / distance).toFixed(1) : 'N/A';
   document.getElementById('workoutPreview').style.display = 'block';
   document.getElementById('previewStats').innerHTML = `
-    ✅ <strong>${escapeHtml(activityIcons[activity])} ${escapeHtml(activity)}</strong> — ${distance.toFixed(1)} km in ${duration} mins<br>
-    🔥 ${workout.calories} kcal burned | 🏃 Pace: ${pace} min/km<br>
-    🔗 <a href="${escapeHtml(activityLinks[activity])}" target="_blank" style="color:#ff6b6b;">Training guide for ${escapeHtml(activity)} ↗</a>
+    <strong>${escapeHtml(activityIcons[activity])} ${escapeHtml(activity)}</strong> — ${distance.toFixed(1)} km in ${duration} mins<br>
+    ${workout.calories} kcal burned | Pace: ${pace} min/km<br>
+    <a href="${escapeHtml(activityLinks[activity])}" target="_blank">Training guide for ${escapeHtml(activity)} ↗</a>
   `;
 
   // Reset form
@@ -261,6 +283,7 @@ document.getElementById('workoutForm').addEventListener('submit', function(e) {
 });
 
 // ---- Render History ----
+// Builds the workout history list (newest first). If a search text is given, it only shows matching activities.
 function renderHistory(filter) {
   const list = document.getElementById('historyList');
   let filtered = workouts.slice().reverse();
@@ -270,7 +293,7 @@ function renderHistory(filter) {
   }
 
   if (filtered.length === 0) {
-    list.innerHTML = '<p class="empty-state">No workouts found. Go log one! 💪</p>';
+    list.innerHTML = '<p class="empty-state">No workouts found.</p>';
     return;
   }
 
@@ -279,7 +302,7 @@ function renderHistory(filter) {
       <span class="history-icon">${escapeHtml(activityIcons[w.activity] || '📦')}</span>
       <div class="history-info">
         <span class="history-activity">${escapeHtml(w.activity)}</span>
-        <span class="history-meta">${formatDate(w.date)} · ${w.duration}m · ${w.calories} kcal${w.notes ? ' · 📝 ' + escapeHtml(w.notes) : ''}</span>
+        <span class="history-meta">${formatDate(w.date)} · ${w.duration}m · ${w.calories} kcal${w.notes ? ' · ' + escapeHtml(w.notes) : ''}</span>
       </div>
       <span class="history-amount">${w.distance.toFixed(1)} km</span>
       <a class="history-link" href="${escapeHtml(activityLinks[w.activity] || '#')}" target="_blank">Guide ↗</a>
@@ -288,19 +311,20 @@ function renderHistory(filter) {
   `).join('');
 }
 
-// ---- Search ----
+// ---- Search box in History: redraw the list every time you type ----
 document.getElementById('searchInput').addEventListener('input', function(e) {
   renderHistory(e.target.value);
 });
 
 // ---- Delete workout ----
+// Removes one workout by its id, saves, and redraws the history list.
 function deleteWorkout(id) {
   workouts = workouts.filter(w => w.id !== id);
   saveWorkouts();
   renderHistory(document.getElementById('searchInput').value);
 }
 
-// ---- Export CSV ----
+// ---- "Export CSV" button: builds a CSV text file from all workouts and downloads it ----
 document.getElementById('exportBtn').addEventListener('click', function() {
   if (workouts.length === 0) { alert('No workouts to export!'); return; }
 
@@ -319,7 +343,7 @@ document.getElementById('exportBtn').addEventListener('click', function() {
   URL.revokeObjectURL(url);
 });
 
-// ---- Clear All ----
+// ---- "Clear All" button: asks for confirmation, then deletes every workout ----
 document.getElementById('clearBtn').addEventListener('click', function() {
   if (workouts.length === 0) return;
   if (confirm('Delete ALL ' + workouts.length + ' workouts? This cannot be undone!')) {
@@ -330,13 +354,14 @@ document.getElementById('clearBtn').addEventListener('click', function() {
 });
 
 // ---- Resources ----
+// Builds the Resources tab: one beginner guide link for each activity, plus 3 general fitness sites.
 function renderResources() {
   const grid = document.getElementById('resourcesGrid');
   grid.innerHTML = Object.entries(activityLinks).map(([act, link]) => `
     <div class="resource-item">
       <span class="resource-emoji">${activityIcons[act]}</span>
       <div class="resource-name">${act.charAt(0).toUpperCase() + act.slice(1)}</div>
-      <a class="resource-link" href="${escapeHtml(link)}" target="_blank">📖 Beginner's Guide ↗</a>
+      <a class="resource-link" href="${escapeHtml(link)}" target="_blank">Beginner's Guide ↗</a>
     </div>
   `).join('') + `
     <div class="resource-item">
@@ -357,7 +382,7 @@ function renderResources() {
   `;
 }
 
-// ---- Profile Modal ----
+// ---- Profile window: open, close, and save name / weight / weekly goal ----
 document.getElementById('profileBtn').addEventListener('click', function() {
   document.getElementById('profileModal').style.display = 'flex';
 });
@@ -376,22 +401,22 @@ document.getElementById('profileForm').addEventListener('submit', function(e) {
   renderDashboard();
 });
 
-// ---- BMI Calculator ----
+// ---- BMI calculator: BMI = weight (kg) / height (m) squared ----
 document.getElementById('calcBmi').addEventListener('click', function() {
   const height = parseFloat(document.getElementById('bmiHeight').value);
   if (!height || height < 0.5) { document.getElementById('bmiResult').textContent = 'Please enter a valid height'; return; }
 
   const bmi = profile.weight / (height * height);
   let category = '';
-  if (bmi < 18.5) category = '⚠️ Underweight';
-  else if (bmi < 25) category = '✅ Normal';
-  else if (bmi < 30) category = '⚠️ Overweight';
-  else category = '⚠️ Obese';
+  if (bmi < 18.5) category = 'Underweight';
+  else if (bmi < 25) category = 'Normal';
+  else if (bmi < 30) category = 'Overweight';
+  else category = 'Obese';
 
-  document.getElementById('bmiResult').innerHTML = `Your BMI: ${bmi.toFixed(1)} — ${category}<br><a href="https://www.cdc.gov/healthyweight/assessing/bmi/" target="_blank" style="color:#ff6b6b;">Learn more ↗</a>`;
+  document.getElementById('bmiResult').innerHTML = `Your BMI: ${bmi.toFixed(1)} — ${category}<br><a href="https://www.cdc.gov/healthyweight/assessing/bmi/" target="_blank">Learn more ↗</a>`;
 });
 
-// ---- Init ----
+// ---- Start: runs once when the page loads ----
 loadProfile();
 loadWorkouts();
 renderDashboard();
@@ -399,13 +424,15 @@ renderHistory();
 
 // ---- Theme (dark/light) ----
 const FITTRACK_THEME = 'fittrack_theme';
+// Switches the page to "dark" or "light" and updates the Theme button text.
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   const btn = document.getElementById('themeToggle');
-  if (btn) btn.textContent = theme === 'light' ? '🌙 Theme' : '☀️ Theme';
-  if (typeof renderCharts === 'function') { try { renderCharts(); } catch (e) {} }
+  if (btn) btn.textContent = theme === 'light' ? 'Dark mode' : 'Light mode';
 }
+// Sets dark or light mode from what was saved last time (dark by default).
 function loadTheme() { applyTheme(localStorage.getItem(FITTRACK_THEME) || 'dark'); }
+// Called by the Theme button: flips between dark and light and remembers the choice.
 function toggleTheme() {
   const cur = document.documentElement.getAttribute('data-theme');
   const next = cur === 'light' ? 'dark' : 'light';

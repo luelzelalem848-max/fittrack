@@ -1,73 +1,53 @@
-# 💪 FitTrack — Personal Fitness Tracker & Landing Page
+# FitTrack
 
-FitTrack is a modern, full-featured fitness tracking web application accompanied by a stunning animated landing page. Log workouts, track progress, visualize stats, and crush your fitness goals — all in your browser with zero sign-up needed.
+A simple workout tracker that runs fully in your browser. No account, no server, no database. Your data stays on your device.
 
----
+**Live demo:** https://luelzelalem848-max.github.io/fittrack/
 
-## 🚀 Features
+> Built with AI assistance. I (Luel) directed the project, tested it, and cleaned it up so I can explain every part. See [EXPLAIN.md](EXPLAIN.md).
 
-### ✨ Landing Page (`index.html`)
-- **Energetic Dark Theme**: Premium dark glassmorphism design with vibrant red/orange energy gradients.
-- **Sticky Blur Navbar**: Quick navigation links, brand logo, and immediate "Launch App" call to action.
-- **Hero Showcase**: Animated floating workout preview cards and instant launcher.
-- **Feature Highlights**: Scroll reveal cards detailing 12 activities, smart dashboard, auto calorie formulas, and CSV export.
-- **12 Activity Showcase Grid**: Staggered animated cards for Running, Cycling, Swimming, Walking, Hiking, Gym, Yoga, Basketball, Football, Rowing, Dancing, and Boxing.
-- **3-Step How It Works**: Visual step guide to jumpstart workout logging.
-- **Animated Stat Counters**: Smooth counting animations triggered on scroll.
+## What it does
 
-### 📊 FitTrack App (`app.html`)
-- **Live Stats Dashboard**: Total workouts, total distance, total time, and auto-calculated calories burned.
-- **Interactive Charts**: Chart.js activity breakdown doughnut chart and distance progression line graph.
-- **Weekly Goals**: Visual progress bar linked to your custom weekly distance target.
-- **12 Activity Logging**: MET-based calorie calculations personalized to your weight.
-- **Workout History & CSV Export**: Searchable workout history, single-entry deletion, and one-click CSV download.
-- **User Profile & BMI Calculator**: Weight-powered calorie precision and instant CDC-referenced BMI results.
+- Log a workout: activity, distance (km), duration (minutes) and optional notes
+- 12 activities: running, cycling, swimming, walking, hiking, gym, yoga, basketball, football, rowing, dancing, boxing
+- Calories are estimated from the activity, your weight and the time (MET formula)
+- Dashboard: total workouts, total distance, total time, total calories
+- Weekly goal bar: counts the distance from the last 7 days against your goal
+- 2 charts: distance by activity, and your total distance over time
+- Breakdown table with one row per activity
+- History: search by activity, delete one workout, or clear all
+- Export all workouts to a CSV file
+- Profile (name, weight, weekly goal) and a BMI calculator
+- Resources tab with a beginner guide link for each activity
+- Dark and light mode (your choice is remembered)
+- Everything is saved in your browser's `localStorage`
 
----
+## Files
 
-## 🛠️ Tech Stack
-- **HTML5**, **CSS3** (CSS Variables, Flexbox, Grid, Glassmorphism, Animations)
-- **Vanilla JavaScript** (ES6+, Intersection Observer API, DOM Manipulation)
-- **Chart.js** (CDN) for responsive charts
-- **Google Fonts** (Poppins)
-- **localStorage** for instant, offline data persistence
+| File | What it is |
+|------|------------|
+| `index.html` | The one page: a short intro on top, the app below |
+| `style.css` | All the styling (colors, layout, mobile) |
+| `app.js` | All the logic (data, charts, buttons), with beginner comments |
+| `EXPLAIN.md` | A walk-through of how the app works |
+| `LICENSE` | MIT |
 
----
+## Built with
 
-## 📁 Project Structure
-```
-fittrack-web/
-├── index.html       # Animated landing page
-├── landing.css      # Dark theme & glassmorphism styling for landing page
-├── landing.js       # Scroll reveals, animated counters & mobile menu logic
-├── app.html         # Main FitTrack web application (4 tabs + profile modal)
-├── style.css        # Fitness app stylesheet
-├── app.js           # Full app logic (logging, charts, history, CSV export, BMI)
-└── README.md        # Documentation
-```
+- HTML, CSS and plain JavaScript (no framework, no build step)
+- [Chart.js](https://www.chartjs.org/) for the charts (loaded from a CDN)
 
----
+Because Chart.js loads from a CDN, you need an internet connection the first time you open it.
 
-## 🚀 How to Run
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/luelzelalem848-max/fittrack.git
-   ```
-2. Open `index.html` in any web browser to view the landing page.
-3. Click **Launch App** or open `app.html` directly to start logging your workouts!
+## Run it yourself
 
----
+1. Download or clone this repo
+2. Open `index.html` in your browser
 
-## 🌐 Deploy to GitHub Pages
-1. Push all code to the `main` branch.
-2. Navigate to **Settings → Pages** in your GitHub repository.
-3. Select `main` branch and `/ (root)` folder.
-4. Save — your landing page and app will be live in minutes!
+That's it. There is nothing to install.
 
----
+## Known limits
 
-## 📄 License
-MIT — free to use, modify, and share.
-
-## 👤 Author
-**Luel Zelalem** — [GitHub Profile](https://github.com/luelzelalem848-max)
+- Data lives only in one browser on one device. Clearing browser data deletes it.
+- Calories are an estimate, and BMI is a rough screening number. Neither is medical advice.
+- Calories are calculated when you log a workout, so changing your weight later does not change old workouts.
